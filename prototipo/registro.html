@@ -1,0 +1,1290 @@
+<title>Planilla de Voley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: cancha a la izquierda (zona de toque), panel de control a la derecha en tablet horizontal; apilado en pantallas angostas. */
+:root {
+  --bg: #e9eef1;
+  --surface: #ffffff;
+  --ink: #15212b;
+  --muted: #5a6875;
+  --line: #d3dbe1;
+  --floor: #e6c8a0;
+  --free: #4f8aa0;
+  --court-line: #ffffff;
+  --net: #15212b;
+  --team-a: #1d4fd0;
+  --team-b: #b5122f;
+  --accent: #d9702a;
+  --accent-ink: #ffffff;
+  --ok: #17803d;
+  --bad: #c2410c;
+  --blk: #6d28d9;
+  --chip: #eef2f5;
+  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1820; --surface: #17232d; --ink: #e8eef2; --muted: #93a3b0; --line: #2a3a47;
+    --floor: #6e5539; --free: #1e3c4a; --court-line: #e8eef2; --net: #e8eef2;
+    --team-a: #7ea8ff; --team-b: #ff7d92; --accent: #f08a43; --accent-ink: #1a1007;
+    --ok: #4ade80; --bad: #fb923c; --blk: #b794f6; --chip: #22313d; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1820; --surface: #17232d; --ink: #e8eef2; --muted: #93a3b0; --line: #2a3a47;
+  --floor: #6e5539; --free: #1e3c4a; --court-line: #e8eef2; --net: #e8eef2;
+  --team-a: #7ea8ff; --team-b: #ff7d92; --accent: #f08a43; --accent-ink: #1a1007;
+  --ok: #4ade80; --bad: #fb923c; --blk: #b794f6; --chip: #22313d; color-scheme: dark;
+}
+
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.app { min-height: 100%; display: flex; flex-direction: column; padding-inline: 16px; padding-block: 0 16px; gap: 12px; }
+
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 10px; border-bottom: 1px solid var(--line); }
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; letter-spacing: .02em; display: flex; align-items: center; gap: 10px; }
+.brand .tag { font-family: var(--font-body); font-weight: 600; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 4px; }
+.tabs { display: flex; gap: 4px; background: var(--chip); padding: 4px; border-radius: 10px; max-width: 100%; overflow-x: auto; }
+.tab { border: 0; background: transparent; padding: 8px 14px; border-radius: 7px; font-weight: 600; color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
+
+/* ---------- Registro ---------- */
+.reg { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (min-width: 900px) { .reg { grid-template-columns: minmax(0, 1fr) 360px; } }
+.court-wrap { min-width: 0; }
+#court { display: block; width: 100%; height: auto; max-height: calc(100dvh - 90px); touch-action: none; user-select: none; border-radius: 10px; }
+#court .free { fill: var(--free); }
+#court .floor { fill: var(--floor); }
+.cl { stroke: var(--court-line); stroke-width: .06; fill: none; }
+.zl { stroke: var(--court-line); stroke-width: .035; stroke-dasharray: .18 .14; opacity: .75; fill: none; }
+.net { stroke: var(--net); stroke-width: .16; }
+.zn { fill: var(--ink); opacity: .35; font: 600 .42px var(--font-display); }
+.pl { font: 700 .62px var(--font-display); text-anchor: middle; dominant-baseline: central; }
+.pl-role { font: 600 .36px var(--font-body); text-anchor: middle; opacity: .75; }
+.pl.a, .pl-role.a { fill: var(--team-a); }
+.pl.b, .pl-role.b { fill: var(--team-b); }
+.tn { font: 700 .62px var(--font-display); text-anchor: middle; letter-spacing: .02em; }
+.tn.a { fill: var(--team-a); } .tn.b { fill: var(--team-b); }
+.ball { fill: var(--accent); stroke: var(--court-line); stroke-width: .05; }
+.ln line { stroke-width: .11; stroke-linecap: round; }
+.ln.a line { stroke: var(--team-a); } .ln.b line { stroke: var(--team-b); }
+.ln .o { stroke-width: .06; fill: var(--floor); }
+.ln.a .o { stroke: var(--team-a); } .ln.b .o { stroke: var(--team-b); }
+.ln .end-p { stroke: none; }
+.ln.a .end-p { fill: var(--team-a); } .ln.b .end-p { fill: var(--team-b); }
+.ln .end-x, .ln .end-b { stroke-width: .12; stroke-linecap: round; }
+.ln.a .end-x, .ln.a .end-b { stroke: var(--team-a); } .ln.b .end-x, .ln.b .end-b { stroke: var(--team-b); }
+.ln .idx { font: 700 .34px var(--font-body); text-anchor: middle; dominant-baseline: central; fill: var(--ink); }
+.ln.faint { opacity: .3; }
+.pending { fill: var(--accent); stroke: var(--court-line); stroke-width: .06; }
+@media (prefers-reduced-motion: no-preference) { .pending { animation: pulse 1s ease-in-out infinite; } }
+@keyframes pulse { 50% { opacity: .45; } }
+
+.panel { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.sample { display: flex; flex-direction: column; gap: 8px; border-color: var(--accent); }
+.sample p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+.score { display: grid; gap: 6px; }
+.score .head { display: flex; justify-content: space-between; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+.srow { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto 44px 64px; align-items: center; gap: 10px; }
+.srow .dot { width: 12px; height: 12px; border-radius: 50%; }
+.srow.a .dot { background: var(--team-a); } .srow.b .dot { background: var(--team-b); }
+.srow .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.srow .nm small { display: block; font-weight: 500; color: var(--muted); font-size: .78rem; }
+.srow .sv { font-size: .72rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.srow .sets { font: 600 1.3rem var(--font-display); text-align: center; color: var(--muted); font-variant-numeric: tabular-nums; }
+.srow .pts { font: 700 2.4rem/1 var(--font-display); text-align: right; font-variant-numeric: tabular-nums; }
+.winner { font-weight: 700; color: var(--ok); }
+
+.prompt { margin: 0; font-weight: 600; min-height: 2.6em; }
+.notice { margin: 0; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--accent); color: var(--ink); background: var(--chip); font-weight: 600; font-size: .9rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips:empty { display: none; }
+.chips .lbl { width: 100%; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.chip { border: 1px solid var(--line); background: var(--chip); border-radius: 999px; padding: 8px 12px; min-height: 40px; font-weight: 600; }
+.chip small { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.chip[aria-pressed="true"] small { color: inherit; opacity: .75; }
+.chip[data-act="out"], .chip[data-act="servetouch"] { flex: 1 1 calc(50% - 6px); min-height: 54px; border-radius: 10px; text-align: left; padding: 8px 12px; background: var(--surface); }
+.chip[data-act="out"] small, .chip[data-act="servetouch"] small { display: block; margin: 2px 0 0; }
+
+.results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.res { min-height: 58px; border: 0; border-radius: 10px; font-weight: 700; color: var(--surface); padding: 6px; line-height: 1.15; }
+.res.punto { background: var(--ok); } .res.error { background: var(--bad); } .res.bloq { background: var(--blk); }
+.res:disabled { opacity: .35; cursor: default; }
+
+.secondary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.undo-bar { display: flex; align-items: center; gap: 12px; margin-top: 8px; min-width: 0; }
+.btn.undo { min-height: 54px; min-width: 150px; font-size: 1.05rem; border-width: 2px; border-color: var(--ink); }
+.undo-what { color: var(--muted); font-size: .9rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.btn { min-height: 46px; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; font-weight: 600; padding: 6px 8px; line-height: 1.15; }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.danger { color: var(--bad); }
+.btn.restart { min-height: 40px; font-size: .9rem; }
+.btn.restart.armed { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+.cfg .note.wide { grid-column: 1 / -1; }
+
+.log { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: .9rem; max-height: 220px; overflow: auto; }
+.log li { display: flex; gap: 8px; align-items: baseline; padding: 4px 0; border-bottom: 1px dashed var(--line); }
+.log li:last-child { border-bottom: 0; }
+.log .k { font: 700 .85rem var(--font-display); min-width: 46px; letter-spacing: .04em; }
+.log .k.a { color: var(--team-a); } .log .k.b { color: var(--team-b); }
+.log .muted, .foot { color: var(--muted); }
+.foot { margin: 0; font-size: .82rem; }
+.section-t { font: 600 .78rem var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 6px; }
+
+/* ---------- Planillas ---------- */
+.sheets { display: flex; flex-direction: column; gap: 18px; }
+.sheets h2 { font: 700 1.4rem var(--font-display); margin: 0; letter-spacing: .02em; text-wrap: balance; }
+.sheets .sub { margin: 2px 0 10px; color: var(--muted); }
+.seg { display: inline-flex; gap: 4px; background: var(--chip); padding: 4px; border-radius: 10px; }
+.minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 560px) { .minis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .minis { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.mini { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.mini h3 { margin: 0; font: 700 1rem var(--font-display); letter-spacing: .03em; }
+.mini .meta { font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mini svg { width: 100%; height: auto; display: block; }
+.mini .floor { fill: var(--floor); }
+.mini .atk { fill: var(--floor); opacity: .7; }
+.mini .free { fill: var(--free); opacity: .25; }
+.mini .cl { stroke-width: .14; }
+.mini .zl { stroke-width: .08; stroke-dasharray: .35 .25; }
+.mini .net { stroke-width: .22; }
+.mini .ln line { stroke-width: .16; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .85rem; color: var(--muted); align-items: center; }
+.legend svg { width: 28px; height: 14px; vertical-align: middle; margin-right: 4px; }
+.empty { color: var(--muted); font-style: italic; margin: 0; }
+
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.pp { border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .85rem; min-width: 560px; width: 100%; }
+.pp th, .pp td { border: 1px solid var(--line); padding: 3px 4px; text-align: center; min-width: 30px; }
+.pp th { font: 600 .78rem var(--font-body); color: var(--muted); }
+.pp th.ta { color: var(--team-a); } .pp th.tb { color: var(--team-b); }
+.pp td.n { font: 700 .9rem var(--font-display); background: var(--chip); }
+.pp td.fa { color: var(--team-a); font-weight: 600; } .pp td.fb { color: var(--team-b); font-weight: 600; }
+.pp.stat { min-width: 520px; }
+.pp.stat td { padding: 6px; }
+.pp .lft { text-align: left; white-space: nowrap; }
+
+/* ---------- Equipos ---------- */
+.cfg { display: flex; flex-direction: column; gap: 14px; max-width: 980px; }
+.cfg-teams { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 760px) { .cfg-teams { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cfg fieldset { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.cfg legend { font: 700 1.1rem var(--font-display); padding: 0 6px; letter-spacing: .03em; }
+.cfg legend.a { color: var(--team-a); } .cfg legend.b { color: var(--team-b); }
+.cfg label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); font-weight: 500; }
+.cfg label.wide { grid-column: 1 / -1; }
+.cfg label.check { flex-direction: row; align-items: center; gap: 8px; color: var(--ink); }
+.cfg input[type="text"], .cfg input[type="number"], .cfg select { min-height: 44px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; background: var(--bg); width: 100%; }
+.cfg input[type="checkbox"] { width: 20px; height: 20px; }
+.cfg .note { margin: 0; color: var(--muted); font-size: .88rem; max-width: 65ch; }
+.cfg .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.cfg .actions .btn { padding-inline: 18px; }
+.toast { color: var(--ok); font-weight: 600; align-self: center; }
+
+/* ---------- Configuración ---------- */
+.settings { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
+.settings h2 { font: 700 1.4rem var(--font-display); margin: 0 0 4px; letter-spacing: .02em; }
+.settings .note { margin: 0; color: var(--muted); max-width: 65ch; }
+.set-list { display: flex; flex-direction: column; gap: 18px; }
+.set-group h3 { margin: 0 0 8px; font: 600 .78rem var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.set-items { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.set-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.set-row:last-child { border-bottom: 0; }
+.set-row input { width: 22px; height: 22px; margin-top: 2px; flex: none; accent-color: var(--accent); }
+.set-row strong { display: block; font-weight: 600; }
+.set-row span { display: block; color: var(--muted); font-size: .9rem; margin-top: 2px; max-width: 60ch; }
+</style>
+
+<div class="app">
+  <header class="bar">
+    <div class="brand">Planilla de Voley <span class="tag">Prototipo</span></div>
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" data-view="registro" id="tab-registro">Registro</button>
+      <button class="tab" role="tab" data-view="planillas" id="tab-planillas">Planillas</button>
+      <button class="tab" role="tab" data-view="equipos" id="tab-equipos">Equipos</button>
+      <button class="tab" role="tab" data-view="config" id="tab-config">Configuración</button>
+    </nav>
+  </header>
+
+  <section id="v-registro" class="reg">
+    <div class="court-wrap">
+      <svg id="court" viewBox="-3.5 -3 25 15" role="img" aria-label="Cancha: toca el origen y luego el destino de cada balón"></svg>
+      <div class="undo-bar">
+        <button class="btn undo" id="b-undo">↶ Deshacer</button>
+        <span class="undo-what" id="undo-what"></span>
+      </div>
+    </div>
+    <aside class="panel">
+      <div id="sample" class="box sample" hidden>
+        <p>Estás viendo un partido de ejemplo con algunos rallies ya anotados, para que veas las planillas llenas.</p>
+        <button class="btn primary" id="b-new">Empezar partido nuevo</button>
+      </div>
+      <div class="box score" id="score"></div>
+      <div class="box" style="display:flex;flex-direction:column;gap:10px">
+        <p class="notice" id="notice" role="status" hidden></p>
+        <p class="prompt" id="prompt"></p>
+        <div class="chips" id="chips"></div>
+        <div class="results">
+          <button class="res punto" id="b-punto">Punto</button>
+          <button class="res error" id="b-error">Error</button>
+          <button class="res bloq" id="b-bloq">Bloqueado</button>
+        </div>
+      </div>
+      <div class="box">
+        <p class="section-t" id="log-t">Rally actual</p>
+        <ol class="log" id="log"></ol>
+      </div>
+      <div class="secondary">
+        <button class="btn" id="b-manA">Punto directo</button>
+        <button class="btn" id="b-manB">Punto directo</button>
+      </div>
+      <button class="btn danger restart" id="b-restart">Reiniciar partido</button>
+      <p class="foot" id="stats"></p>
+    </aside>
+  </section>
+
+  <section id="v-planillas" class="sheets" hidden></section>
+
+  <section id="v-equipos" hidden>
+    <form class="cfg" id="cfg-form" autocomplete="off">
+      <p class="note">Los números se pueden dejar vacíos si todavía no conoces la alineación del rival; la app muestra la posición (P1, C2…) hasta que los completes. Quién saca y dónde arranca el armador se eligen aquí para el set 1 y en la pantalla de Registro al empezar cada set. Cambiarlos recalcula las rotaciones de todo lo ya anotado.</p>
+      <div class="cfg-teams" id="cfg-teams"></div>
+      <fieldset>
+        <legend>Partido</legend>
+        <label>Saca primero
+          <select id="m-first"><option value="A">Equipo izquierdo</option><option value="B">Equipo derecho</option></select>
+        </label>
+        <label>Formato
+          <select id="m-bestof"><option value="5">Al mejor de 5</option><option value="3">Al mejor de 3</option><option value="1">Set único</option></select>
+        </label>
+        <label>Puntos por set
+          <input type="number" id="m-points" min="1" max="99" step="1" inputmode="numeric" required>
+        </label>
+        <label id="m-tb-label">Puntos del set decisivo
+          <input type="number" id="m-tiebreak" min="1" max="99" step="1" inputmode="numeric" required>
+        </label>
+        <p class="note wide">Siempre se gana con 2 puntos de diferencia. Si cambias los puntos con el partido empezado, el marcador se recalcula con la nueva regla.</p>
+      </fieldset>
+      <div class="actions">
+        <button class="btn primary" type="submit">Guardar cambios</button>
+        <button class="btn danger" type="button" id="b-reset">Borrar lo registrado</button>
+        <span class="toast" id="toast" hidden>Guardado</span>
+      </div>
+    </form>
+  </section>
+
+  <section id="v-config" class="settings" hidden>
+    <div>
+      <h2>Configuración</h2>
+      <p class="note">Qué pregunta y qué hace sola la app mientras anotas. Apaga lo que no alcances a registrar en vivo; los cambios se aplican al instante y no borran nada de lo ya anotado.</p>
+    </div>
+    <div class="set-list" id="set-list"></div>
+  </section>
+</div>
+
+<script>
+// ===== Modelo =====
+// Orden de los roles alrededor de la rotación, partiendo del armador:
+// armador en 1 → P1 en 2, C2 en 3, OP en 4, P2 en 5, C1 en 6.
+const ROT_ORDER = ['S', 'P1', 'C2', 'OP', 'P2', 'C1'];
+const ROLE_NAME = { S: 'Armador', P1: 'Punta 1', P2: 'Punta 2', C1: 'Central 1', C2: 'Central 2', OP: 'Opuesto', L: 'Líbero' };
+const ROLE_SHORT = { S: 'Arm',P1: 'P1', P2: 'P2', C1: 'C1', C2: 'C2', OP: 'OP', L: 'L' };
+// Zonas vistas desde el equipo: fila por distancia a la red, columna desde su izquierda.
+const ZG = [[4, 3, 2], [7, 8, 9], [5, 6, 1]];
+const ROT_COLUMNS = [1, 6, 5, 4, 3, 2];
+const KIND = { saque: 'Saque', K1: 'K1', K2: 'K2' };
+const HOW = { S: 'saque', A: 'ataque (K1)', CO: 'contraataque (K2)', B: 'bloqueo', E: 'error del rival' };
+// Tipos de error. A, S y B vienen de la planilla en papel; el resto se agregó para los puntos directos.
+const TIPO_NAME = { A: 'ataque', S: 'saque', B: 'bloqueo', R: 'recepción', D: 'defensa', AR: 'armado / doble', RD: 'red', RT: 'rotación', O: 'otro' };
+const ERR_KINDS = ['R', 'D', 'AR', 'RD', 'RT', 'O'];
+// Calificación de recepción, igual que la planilla: doble positiva 3, positiva 2, negativa 1, error 0.
+const GRADES = [[3, 'Doble positiva', '#'], [2, 'Positiva', '+'], [1, 'Negativa', '−'], [0, 'Error', '=']];
+const GRADE_SYM = { 3: '#', 2: '+', 1: '−', 0: '=' };
+const STORE = 'voley-proto-v1';
+
+const other = (t) => (t === 'A' ? 'B' : 'A');
+const mod = (n, m) => ((n % m) + m) % m;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+function defaultCfg() {
+  return {
+    bestOf: 5, setPoints: 25, tiebreak: 15, firstServer: 'A', gradeReception: true,
+    teams: {
+      A: { name: 'Santander', useLibero: true, startZone: 1, nums: { S: '2', P1: '12', P2: '14', C1: '9', C2: '13', OP: '7', L: '1' } },
+      B: { name: 'Valle', useLibero: true, startZone: 1, nums: { S: '21', P1: '4', P2: '8', C1: '5', C2: '10', OP: '11', L: '' } },
+    },
+  };
+}
+
+// pending: pregunta abierta en el panel. 'attackOut' se responde antes de cerrar el rally; el resto son
+// detalles opcionales del punto recién cerrado: 'block', 'blockTouch', 'manual', 'ace', 'defTouch',
+// 'serveOut', 'serveNet'. Se limpia al tocar la cancha.
+let cfg, rallies, cur, isSample = false, pending = null, notice = '', view = 'registro', sheetTeam = 'B', resetArmed = false;
+const newRally = () => ({ lines: [], from: null });
+// Comportamientos opcionales (pestaña Configuración). Todos vienen activados por defecto.
+const SETTINGS = [
+  { group: 'Saque', items: [
+    { key: 'autoServeErr', title: 'Saque fuera o a la malla = punto automático', desc: 'Si el destino del saque queda fuera de la cancha o en la cancha de quien saca, el punto va solo al otro equipo.' },
+    { key: 'gradeReception', title: 'Calificar la recepción después de cada saque', desc: 'Doble positiva, positiva, negativa o error, y quién recibió. El error (=) cierra el rally como ace.' },
+  ] },
+  { group: 'Ataque', items: [
+    { key: 'gradeDefense', title: 'Calificar la defensa después de cada ataque', desc: 'Misma escala que la recepción, para los dos equipos. El error (=) cierra el rally como punto del atacante. Es lo más pesado de anotar en vivo.' },
+    { key: 'confirmOut', title: 'Preguntar qué pasó cuando un ataque cae fuera o en la malla', desc: 'Fuera sin tocar, tocó el bloqueo, lo tocó la defensa, malla por potencia o por salir bajo, o siguió la jugada.' },
+  ] },
+];
+const isOn = (key) => cfg[key] !== false;
+const gradeOn = () => isOn('gradeReception');
+const defenseOn = () => isOn('gradeDefense');
+
+// Marco del equipo: u = lateral desde su izquierda (0..9), d = distancia a la red (positiva en su lado).
+// Cancha: x 0..18 (red en x=9), y 0..9. Equipo A a la izquierda mirando a la derecha.
+function frame(team, p) { return team === 'A' ? { u: p.y, d: 9 - p.x } : { u: 9 - p.y, d: p.x - 9 }; }
+function zoneOf(team, p) {
+  const { u, d } = frame(team, p);
+  const row = Math.floor(clamp(d, 0, 8.999) / 3);
+  const col = Math.floor(clamp(u, 0, 8.999) / 3);
+  return ZG[row][col];
+}
+// Zona de saque: solo cuenta la altura del toque (franja de la zona 1, 6 o 5).
+function serveZone(team, p) {
+  const { u } = frame(team, p);
+  return ZG[2][Math.floor(clamp(u, 0, 8.999) / 3)];
+}
+const sideOf = (p) => (p.x < 9 ? 'A' : 'B');
+const isOut = (p) => p.x < 0 || p.x > 18 || p.y < 0 || p.y > 9;
+// Un toque sobre la red o muy pegado a ella (hasta NET_BAND metros del lado contrario) cuenta como malla:
+// en pantalla la red es una línea delgada y el dedo cae fácil un poco del otro lado.
+const NET_BAND = 0.4;
+const inNet = (team, p) => frame(team, p).d >= -NET_BAND;
+
+function target(set) { return cfg.bestOf > 1 && set === cfg.bestOf - 1 ? cfg.tiebreak : cfg.setPoints; }
+// Inicio de cada set: quién saca y en qué zona arranca el armador de cada equipo.
+// Si no se eligió, el saque alterna y el armador arranca donde dice la pestaña Equipos.
+function setStart(set) { return cfg.sets?.[set] ?? {}; }
+function firstServer(set) { return setStart(set).serve ?? (set % 2 === 0 ? cfg.firstServer : other(cfg.firstServer)); }
+function startZone(team, set) { return setStart(set)[team] ?? cfg.teams[team].startZone; }
+function setSetStart(set, patch) {
+  cfg.sets = cfg.sets ?? {};
+  cfg.sets[set] = { ...setStart(set), ...patch };
+}
+
+// Todo el estado del partido se calcula a partir de la lista de rallies terminados.
+function derive() {
+  const need = Math.floor(cfg.bestOf / 2) + 1;
+  let set = 0, score = { A: 0, B: 0 }, rot = { A: 0, B: 0 }, serving = firstServer(0), winner = null;
+  const sets = { A: 0, B: 0 };
+  for (const r of rallies) {
+    r.ctx = { set, serving, rot: { ...rot }, score: { ...score } };
+    const w = r.winner;
+    score[w]++;
+    if (w !== serving) { rot[w]++; serving = w; } // cambio de saque: rota quien recupera el saque
+    const hi = Math.max(score.A, score.B), lo = Math.min(score.A, score.B);
+    if (hi >= target(set) && hi - lo >= 2) {
+      sets[w]++;
+      if (sets[w] === need) { winner = w; break; }
+      set++; score = { A: 0, B: 0 }; rot = { A: 0, B: 0 }; serving = firstServer(set);
+    }
+  }
+  return { set, score, sets, rot, serving, winner };
+}
+
+// Posiciones en cancha (zona → rol) de un equipo en un momento del partido.
+// ctx = { set, rot, serving }: sirve tanto el estado actual como el contexto guardado de cada rally.
+function lineup(team, ctx) {
+  const t = cfg.teams[team];
+  const serving = ctx.serving;
+  const sZone = mod(startZone(team, ctx.set) - 1 - ctx.rot[team], 6) + 1;
+  const pos = {};
+  ROT_ORDER.forEach((role, i) => { pos[mod(sZone - 1 + i, 6) + 1] = role; });
+  if (t.useLibero) {
+    for (const z of [5, 6, 1]) {
+      const r = pos[z];
+      if ((r === 'C1' || r === 'C2') && !(z === 1 && serving === team)) pos[z] = 'L';
+    }
+  }
+  return { sZone, pos };
+}
+
+// Propone quién atacó según la zona de origen y la rotación.
+function suggestRole(zone, lu) {
+  const front = [4, 3, 2].map((z) => lu.pos[z]).filter((r) => r !== 'S');
+  const back = [5, 6, 1].map((z) => lu.pos[z]).filter((r) => r !== 'S' && r !== 'L');
+  const isP = (r) => r === 'P1' || r === 'P2';
+  const isC = (r) => r === 'C1' || r === 'C2';
+  if ([4, 7, 5].includes(zone)) return front.find(isP) ?? front[0];
+  if ([3, 8].includes(zone)) return front.find(isC) ?? front[0];
+  if (zone === 6) return back.find(isP) ?? 'OP';
+  return 'OP';
+}
+
+// Propone quién recibió según dónde cayó el saque (la franja media se asigna a la zaguera).
+function suggestReceiver(team, p, lu) {
+  const z = zoneOf(team, p);
+  const role = lu.pos[{ 7: 5, 8: 6, 9: 1 }[z] ?? z];
+  return role === 'S' ? null : role ?? null;
+}
+
+// Propone quién defendió según dónde cayó el ataque (aquí el armador sí cuenta).
+function suggestDefender(team, p, lu) {
+  const z = zoneOf(team, p);
+  return lu.pos[{ 7: 5, 8: 6, 9: 1 }[z] ?? z] ?? null;
+}
+
+function num(team, role) {
+  if (!role) return '?';
+  const n = cfg.teams[team].nums[role];
+  return n ? `#${n}` : ROLE_SHORT[role];
+}
+
+// ===== Acciones =====
+function tap(p) {
+  const st = derive();
+  if (st.winner) return;
+  pending = null;
+  notice = '';
+  if (!cur.from) { cur.from = p; return; }
+  const from = cur.from;
+  cur.from = null;
+  const lines = cur.lines;
+  let team, kind, role, extra;
+  if (!lines.length) {
+    team = st.serving; kind = 'saque';
+    role = lineup(team, st).pos[1];
+    const receiver = other(team);
+    extra = { rec: { role: suggestReceiver(receiver, p, lineup(receiver, st)), grade: null } };
+  } else {
+    team = sideOf(from);
+    const receiver = other(st.serving);
+    kind = team === receiver && !lines.some((l) => l.team === receiver) ? 'K1' : 'K2';
+    role = suggestRole(zoneOf(team, from), lineup(team, st));
+    extra = { def: newDef(team, p, st) };
+  }
+  lines.push({ team, kind, role, from, to: p, result: 'sigue', t: Date.now(), ...extra });
+
+  // Saque fuera de la cancha o que no pasó la red: error automático, punto para el otro equipo.
+  // Solo si el saque se marcó del lado correcto; si no, puede ser que la app tenga mal quién saca
+  // y se muestra un aviso en lugar de dar el punto.
+  if (kind === 'saque' && isOn('autoServeErr') && sideOf(from) === team && (isOut(p) || inNet(team, p))) {
+    const net = !isOut(p);
+    endRally('error');
+    rallies.at(-1).auto = true; // cerrado por la app: Deshacer quita el saque completo
+    notice = `Saque ${net ? 'a la malla' : 'fuera'} de ${num(team, role)}: punto para ${cfg.teams[other(team)].name}. Si no fue así, usa Deshacer.`;
+    // Malla: se puede indicar por qué no pasó. Fuera: se puede corregir si la recepción la tocó (ace).
+    pending = net ? 'serveNet' : 'serveOut';
+  }
+
+  // Ataque que cae fuera o no pasa la red: se pregunta qué pasó (si la opción está activa).
+  if (kind !== 'saque') checkAttackOut();
+}
+
+// Defensa del ataque: la hace el equipo contrario al que atacó.
+function newDef(atkTeam, to, st) {
+  const d = other(atkTeam);
+  return { role: suggestDefender(d, to, lineup(d, st)), grade: null };
+}
+
+const confirmOn = () => isOn('confirmOut');
+// Dónde terminó el trazo: 'fuera', 'malla' (no pasó la red o quedó sobre ella) o null.
+function landing(l) { return isOut(l.to) ? 'fuera' : inNet(l.team, l.to) ? 'malla' : null; }
+function checkAttackOut() {
+  const last = cur.lines.at(-1);
+  pending = confirmOn() && last && last.kind !== 'saque' && landing(last) ? 'attackOut' : null;
+}
+
+// Respuesta a "¿Qué pasó?" cuando un ataque cae fuera o en la malla.
+function resolveOut(val) {
+  const last = cur.lines.at(-1);
+  if (!last) return;
+  const atk = last.team;
+  pending = null;
+  if (val === 'continue') return;
+  if (val === 'flip') {
+    // El ataque fue del otro equipo: se corrige el equipo, el complejo (K1/K2) y el jugador propuesto.
+    const st = derive();
+    const prev = cur.lines.slice(0, -1);
+    const receiver = other(st.serving);
+    last.team = other(atk);
+    last.kind = last.team === receiver && !prev.some((l) => l.team === receiver) ? 'K1' : 'K2';
+    last.role = suggestRole(zoneOf(last.team, last.from), lineup(last.team, st));
+    last.def = newDef(last.team, last.to, st);
+    checkAttackOut();
+    return;
+  }
+  if (val === 'clean') return endRally('error', { detail: 'fuera' });
+  if (val === 'defense') {
+    // Lo tocó la defensa y salió: punto del atacante y error de defensa (0) de quien la tocó.
+    last.touch = 'defensa';
+    last.def = { role: last.def?.role ?? null, grade: 0 };
+    endRally('punto');
+    pending = 'defTouch';
+    return;
+  }
+  if (val === 'block') {
+    last.touch = 'bloqueo';
+    endRally('punto');
+    rallies.at(-1).blockTouch = { team: other(atk), role: null };
+    pending = 'blockTouch';
+    return;
+  }
+  if (val === 'blocked') return endRally('bloqueado');
+  if (val.startsWith('net')) return endRally('error', { detail: 'malla', reason: val.split(':')[1] ?? null });
+}
+
+// Si el saque se marcó del lado del equipo que no tiene el servicio y el set no ha empezado,
+// se corrige quién saca y se rehace el trazo del saque con el sacador correcto.
+function switchServe() {
+  const st = derive();
+  if (rallies.some((r) => r.ctx.set === st.set)) return;
+  setSetStart(st.set, { serve: other(st.serving) });
+  const s = cur.lines[0];
+  if (s) {
+    const nst = derive();
+    s.team = nst.serving;
+    s.role = lineup(s.team, nst).pos[1];
+    const rec = other(s.team);
+    s.rec = { role: suggestReceiver(rec, s.to, lineup(rec, nst)), grade: null };
+  }
+}
+
+// extra (solo errores): { detail: 'fuera' | 'malla', reason: 'potencia' | 'bajo' | null }
+function endRally(result, extra = {}) {
+  notice = '';
+  const last = cur.lines.at(-1);
+  if (!last || cur.from) return;
+  last.result = result;
+  const winner = result === 'punto' ? last.team : other(last.team);
+  let how;
+  if (result === 'punto') how = { col: last.kind === 'saque' ? 'S' : last.kind === 'K1' ? 'A' : 'CO', team: last.team, role: last.role };
+  else if (result === 'error') {
+    how = { col: 'E', team: last.team, role: last.role, tipo: last.kind === 'saque' ? 'S' : 'A', detail: extra.detail ?? landing(last), reason: extra.reason ?? null };
+  } else how = { col: 'B', team: winner, role: null };
+  const ace = result === 'punto' && last.kind === 'saque';
+  if (ace) last.rec = { role: last.rec?.role ?? null, grade: 0 }; // un ace es un error de recepción
+  rallies.push({ lines: cur.lines, winner, how, t: Date.now() });
+  cur = newRally();
+  pending = result === 'bloqueado' ? 'block' : ace ? 'ace' : null;
+}
+
+function manualPoint(team) {
+  if (derive().winner) return;
+  notice = '';
+  rallies.push({ lines: cur.lines, winner: team, how: { col: 'E', team: other(team), role: null, tipo: 'O' }, t: Date.now() });
+  cur = newRally();
+  pending = 'manual';
+}
+
+// Respuesta a los botones de jugadores / tipos que aparecen en el panel.
+function chipAction(act, val) {
+  const r = rallies.at(-1);
+  const last = cur.lines.at(-1);
+  const toggle = (curVal) => (curVal === val ? null : val);
+  if (act === 'setserve') setSetStart(derive().set, { serve: val });
+  else if (act === 'setzone') { const [t, z] = val.split(':'); setSetStart(derive().set, { [t]: Number(z) }); }
+  else if (act === 'switchserve') switchServe();
+  else if (act === 'out') resolveOut(val);
+  else if (act === 'servetouch' && r) {
+    // El saque iba fuera pero lo tocó la recepción: se reabre el rally y se cierra como ace.
+    rallies.pop();
+    cur = { lines: r.lines, from: null };
+    cur.lines.at(-1).result = 'sigue';
+    endRally('punto'); // deja pendiente elegir quién recibió (error de recepción)
+    rallies.at(-1).auto = true; // sigue siendo un punto que nació del cierre automático
+  }
+  else if (act === 'btrole' && r?.blockTouch) r.blockTouch.role = toggle(r.blockTouch.role);
+  else if (act === 'netreason' && r) r.how.reason = toggle(r.how.reason);
+  else if (act === 'role' && last) last.role = val;
+  else if ((act === 'blk' || act === 'errrole') && r) r.how.role = toggle(r.how.role);
+  else if (act === 'errkind' && r) r.how.tipo = val;
+  else if (act === 'recrole') {
+    const s = pending === 'ace' ? r.lines[0] : last;
+    if (s) s.rec = { grade: s.rec?.grade ?? null, role: toggle(s.rec?.role) };
+  } else if (act === 'grade' && last) {
+    const g = Number(val);
+    if (g === 0) endRally('punto'); // recepción error = ace del sacador
+    else last.rec = { role: last.rec?.role ?? null, grade: last.rec?.grade === g ? null : g };
+  } else if (act === 'defrole') {
+    const s = pending === 'defTouch' ? r.lines.at(-1) : last;
+    if (s) s.def = { grade: s.def?.grade ?? null, role: toggle(s.def?.role) };
+  } else if (act === 'dgrade' && last) {
+    const g = Number(val);
+    if (g === 0) {
+      // defensa error = punto del atacante; luego se puede corregir quién defendió
+      last.def = { role: last.def?.role ?? null, grade: 0 };
+      endRally('punto');
+      pending = 'defTouch';
+    } else last.def = { role: last.def?.role ?? null, grade: last.def?.grade === g ? null : g };
+  }
+}
+
+function undo() {
+  pending = null;
+  notice = '';
+  if (cur.from) { cur.from = null; return; }
+  if (cur.lines.length) { cur.lines.pop(); return; }
+  const r = rallies.pop();
+  if (!r) return;
+  cur = { lines: r.lines, from: null };
+  // Si el punto lo dio la app sola (saque fuera o a la malla), se quita también el trazo que lo provocó.
+  if (r.auto) { cur.lines.pop(); return; }
+  const l = cur.lines.at(-1);
+  if (l) {
+    l.result = 'sigue';
+    delete l.touch;
+    // el 0 lo puso el cierre del punto (ace / defensa error); al reabrir queda sin calificar
+    if (l.rec?.grade === 0) l.rec.grade = null;
+    if (l.def?.grade === 0) l.def.grade = null;
+  }
+  // Si el ataque reabierto cayó fuera o en la malla, se vuelve a preguntar qué pasó.
+  checkAttackOut();
+}
+
+// ===== Persistencia (solo en este dispositivo) =====
+function save() {
+  try { localStorage.setItem(STORE, JSON.stringify({ cfg, rallies: rallies.map(({ ctx, ...r }) => r), cur, isSample })); } catch {}
+}
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(STORE));
+    if (d && d.cfg) { cfg = d.cfg; rallies = d.rallies; cur = d.cur; isSample = !!d.isSample; return true; }
+  } catch {}
+  return false;
+}
+
+// Partido de ejemplo: se carga con las mismas acciones que haría el usuario.
+function seed() {
+  cfg = defaultCfg(); rallies = []; cur = newRally(); isSample = true;
+  const P = (x, y) => tap({ x, y });
+  const play = (pts, res) => { for (let i = 0; i < pts.length; i += 2) P(pts[i], pts[i + 1]); endRally(res); };
+  play([-1, 8, 14, 4.5, 10.5, 7.6, 3, 1.5], 'punto');
+  play([19, 1, 4, 5, 8, 1.5, 16, 7, 10.5, 4.5, 5, 7, 7.5, 8, 13, 1.5], 'punto');
+  play([-1, 4.5, 19.6, 2], 'error');
+  play([19, 7, 2, 4, 7.5, 4.5, 14, 8, 10.5, 1.5, 3, 8], 'bloqueado'); chipAction('blk', 'C1');
+  play([-1, 1, 15, 7.5], 'punto');
+  play([-1, 8, 13, 4, 10.5, 7.6, 5, 1], 'punto');
+  play([19, 4.5, 6, 7, 7.8, 7.6, 16.5, 1.2], 'punto');
+  play([-1, 4.5, 14, 6, 10.5, 4.5, -1.5, 4], 'error');
+  play([-1, 4.5, 12, 2, 10.6, 1.6, 2, 8.2], 'punto');
+  play([19, 1, 3, 2, 7.5, 1.5, 16, 8, 15.5, 4.5, 2, 4.8], 'punto');
+  play([19, 8, 5, 3, 7.6, 1.4, 17, 2.5], 'punto');
+  play([-1, 1, 16, 2, 10.5, 7.6, 1.5, 0.8], 'punto');
+  P(19, 4.5); P(4, 1.5); P(7.5, 7.5); P(15, 5); manualPoint('A'); chipAction('errkind', 'RD'); chipAction('errrole', 'C2');
+  // Ataque que toca el bloqueo y sale, y un saque a la malla.
+  P(-1, 4.5); P(14, 3); P(10.5, 7.6); P(-1, 1); chipAction('out', 'block');
+  derive(); // calcula el contexto del rally recién cerrado
+  const blu = lineup('A', rallies.at(-1).ctx);
+  chipAction('btrole', [4, 3, 2].map((z) => blu.pos[z]).find((x) => x !== 'S'));
+  P(19, 7); P(12, 5); chipAction('netreason', 'bajo');
+  notice = '';
+  // Calificaciones de recepción de ejemplo en los saques que siguieron en juego.
+  const sample = [2, 3, 1, 2, 2, 3, 1, 2, 3, 2];
+  let i = 0;
+  for (const r of rallies) {
+    const s = r.lines[0];
+    if (s?.rec && s.result === 'sigue') s.rec.grade = sample[i++ % sample.length];
+    // y de defensa en los ataques que siguieron en juego
+    for (const l of r.lines.slice(1)) if (l.def && l.result === 'sigue') l.def.grade = sample[i++ % sample.length];
+  }
+  pending = null;
+}
+
+// ===== Render: cancha =====
+const svg = document.getElementById('court');
+
+function endMarker(l, x, y, ang, scale = 1) {
+  const r = 0.26 * scale;
+  if (l.result === 'punto') return `<circle class="end-p" cx="${x}" cy="${y}" r="${r}"/>`;
+  if (l.result === 'error') return `<path class="end-x" d="M${x - r} ${y - r}L${x + r} ${y + r}M${x - r} ${y + r}L${x + r} ${y - r}"/>`;
+  if (l.result === 'bloqueado') {
+    const dx = Math.cos(ang + Math.PI / 2) * r * 1.3, dy = Math.sin(ang + Math.PI / 2) * r * 1.3;
+    return `<path class="end-b" d="M${x - dx} ${y - dy}L${x + dx} ${y + dy}"/>`;
+  }
+  return '';
+}
+
+function lineSVG(l, i, faint) {
+  const { from: a, to: b } = l;
+  const ang = Math.atan2(b.y - a.y, b.x - a.x);
+  return `<g class="ln ${l.team === 'A' ? 'a' : 'b'}${faint ? ' faint' : ''}">
+    <line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>
+    ${endMarker(l, b.x, b.y, ang)}
+    <circle class="o" cx="${a.x}" cy="${a.y}" r=".26"/>
+    <text class="idx" x="${a.x}" y="${a.y}">${i + 1}</text>
+  </g>`;
+}
+
+function renderCourt(st) {
+  // Zona libre: 3,5 m detrás de cada fondo (saque) y 3 m a cada lateral, para poder marcar balones fuera.
+  let s = `<rect class="free" x="-3.5" y="-3" width="25" height="15"/><rect class="floor" x="0" y="0" width="18" height="9"/>`;
+  for (const x of [3, 15]) s += `<line class="zl" x1="${x}" y1="0" x2="${x}" y2="9"/>`;
+  for (const y of [3, 6]) s += `<line class="zl" x1="0" y1="${y}" x2="18" y2="${y}"/>`;
+  s += `<rect class="cl" x="0" y="0" width="18" height="9"/><line class="cl" x1="6" y1="0" x2="6" y2="9"/><line class="cl" x1="12" y1="0" x2="12" y2="9"/>`;
+  s += `<line class="net" x1="9" y1="-0.5" x2="9" y2="9.5"/>`;
+
+  for (const team of ['A', 'B']) {
+    const lu = lineup(team, st);
+    const cls = team === 'A' ? 'a' : 'b';
+    for (let row = 0; row < 3; row++) for (let col = 0; col < 3; col++) {
+      const zone = ZG[row][col];
+      const u0 = col * 3, d0 = row * 3;
+      // número de zona en la esquina superior izquierda de la celda (en pantalla)
+      const xmin = team === 'A' ? 9 - d0 - 3 : 9 + d0;
+      const ymin = team === 'A' ? u0 : 9 - u0 - 3;
+      s += `<text class="zn" x="${xmin + 0.15}" y="${ymin + 0.45}">${zone}</text>`;
+      const role = lu.pos[zone];
+      if (role) {
+        const cx = team === 'A' ? 9 - (d0 + 1.5) : 9 + d0 + 1.5;
+        const cy = team === 'A' ? u0 + 1.5 : 9 - u0 - 1.5;
+        s += `<text class="pl ${cls}" x="${cx}" y="${cy - 0.12}">${esc(num(team, role))}</text>`;
+        s += `<text class="pl-role ${cls}" x="${cx}" y="${cy + 0.55}">${ROLE_SHORT[role]}</text>`;
+      }
+    }
+    const nx = team === 'A' ? 4.5 : 13.5;
+    s += `<text class="tn ${cls}" x="${nx}" y="-0.6">${esc(cfg.teams[team].name)} · Armador en ${lu.sZone}</text>`;
+  }
+  if (!st.winner) {
+    const bx = st.serving === 'A' ? -1.9 : 19.9;
+    s += `<circle class="ball" cx="${bx}" cy="4.5" r=".42"/>`;
+  }
+
+  if (!cur.lines.length && rallies.length) rallies.at(-1).lines.forEach((l, i) => (s += lineSVG(l, i, true)));
+  cur.lines.forEach((l, i) => (s += lineSVG(l, i, false)));
+  if (cur.from) s += `<circle class="pending" cx="${cur.from.x}" cy="${cur.from.y}" r=".32"/>`;
+  svg.innerHTML = s;
+}
+
+svg.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+  tap({ x: Math.round(p.x * 100) / 100, y: Math.round(p.y * 100) / 100 });
+  keepAwake();
+  save(); render();
+});
+
+// ===== Render: panel =====
+function renderPanel(st) {
+  document.getElementById('sample').hidden = !isSample;
+  const T = cfg.teams;
+  const row = (t) => {
+    const lu = lineup(t, st);
+    return `<div class="srow ${t === 'A' ? 'a' : 'b'}">
+      <span class="dot"></span>
+      <span class="nm">${esc(T[t].name)}<small>Armador en ${lu.sZone}</small></span>
+      <span class="sv">${!st.winner && st.serving === t ? 'Saca' : ''}</span>
+      <span class="sets" title="Sets">${st.sets[t]}</span>
+      <span class="pts">${st.winner ? '' : st.score[t]}</span>
+    </div>`;
+  };
+  document.getElementById('score').innerHTML = `
+    <div class="head"><span>${st.winner ? 'Partido terminado' : `Set ${st.set + 1} · a ${target(st.set)}`}</span><span>Sets · Puntos</span></div>
+    ${row('A')}${row('B')}
+    ${st.winner ? `<div class="winner">Ganó ${esc(T[st.winner].name)} ${st.sets[st.winner]}-${st.sets[other(st.winner)]}</div>` : ''}`;
+
+  const last = cur.lines.at(-1);
+  const prompt = document.getElementById('prompt');
+  const chips = document.getElementById('chips');
+  // Cada grupo: un título y sus botones { act, val, text, sub, on }.
+  const groups = [];
+  const onCourt = (lu) => [4, 3, 2, 5, 6, 1].map((z) => lu.pos[z]);
+  const roleItems = (team, roles, act, sel) => roles.map((r) => ({ act, val: r, text: num(team, r), sub: ROLE_SHORT[r], on: r === sel }));
+
+  if (pending === 'attackOut') {
+    const atk = last.team, def = other(atk);
+    const where = landing(last);
+    const pt = (t) => `punto ${T[t].name}`;
+    prompt.textContent = `Ataque de ${T[atk].name} ${num(atk, last.role)} ${where === 'fuera' ? 'cayó fuera' : 'quedó en la malla'}. ¿Qué pasó?`;
+    const opts = where === 'fuera'
+      ? [['clean', 'Fuera sin tocar', pt(def)], ['block', `Tocó el bloqueo de ${T[def].name}`, pt(atk)], ['defense', 'Lo tocó la defensa y salió', pt(atk)]]
+      : [['net:potencia', 'Malla: le faltó potencia', pt(def)], ['net:bajo', 'Malla: salió bajo', pt(def)], ['net', 'Malla (sin detalle)', pt(def)], ['blocked', `Lo bloqueó ${T[def].name}`, pt(def)]];
+    opts.push(['continue', 'Siguió la jugada', 'sin punto'], ['flip', `El ataque fue de ${T[def].name}`, 'corregir equipo']);
+    groups.push({ label: 'Toca una opción, o toca la cancha si siguió la jugada', items: opts.map(([val, text, sub]) => ({ act: 'out', val, text, sub, on: false })) });
+  } else if (pending) {
+    const r = rallies.at(-1);
+    if (pending === 'serveOut') {
+      const st2 = r.how.team, rec = other(st2);
+      prompt.textContent = `Saque fuera de ${T[st2].name} ${num(st2, r.how.role)}. Si nadie la tocó, toca la cancha para seguir.`;
+      groups.push({ label: '¿La tocó la recepción?', items: [{ act: 'servetouch', val: '1', text: `Sí, la tocó ${T[rec].name}`, sub: `fue ace de ${T[st2].name}`, on: false }] });
+    } else if (pending === 'defTouch') {
+      const l = r.lines.at(-1), t = other(l.team);
+      const lu = lineup(t, r.ctx);
+      prompt.textContent = `Punto de ${T[r.winner].name}: la defensa de ${T[t].name} no pudo controlar el ataque. Corrige quién defendió o toca la cancha para seguir.`;
+      groups.push({ label: '¿Quién defendió? (cuenta como error de defensa)', items: roleItems(t, onCourt(lu), 'defrole', l.def?.role) });
+    } else if (pending === 'blockTouch') {
+      const t = r.blockTouch.team;
+      const lu = lineup(t, r.ctx);
+      prompt.textContent = `Punto de ${T[r.winner].name}: el balón tocó el bloqueo de ${T[t].name} y salió.`;
+      groups.push({ label: '¿Quién tocó el bloqueo? (opcional, cuenta como error de bloqueo)', items: roleItems(t, [4, 3, 2].map((z) => lu.pos[z]), 'btrole', r.blockTouch.role) });
+    } else if (pending === 'serveNet') {
+      prompt.textContent = `Saque a la malla de ${T[r.how.team].name} ${num(r.how.team, r.how.role)}. ¿Por qué no pasó? (opcional)`;
+      groups.push({ label: 'Motivo', items: [['potencia', 'Le faltó potencia'], ['bajo', 'Salió bajo']].map(([v, n]) => ({ act: 'netreason', val: v, text: n, on: r.how.reason === v })) });
+    } else if (pending === 'block') {
+      const lu = lineup(r.winner, r.ctx);
+      prompt.textContent = `Bloqueo de ${T[r.winner].name}. Elige al bloqueador o toca la cancha para seguir.`;
+      groups.push({ label: '¿Quién bloqueó? (opcional)', items: roleItems(r.winner, [4, 3, 2].map((z) => lu.pos[z]), 'blk', r.how.role) });
+    } else if (pending === 'manual') {
+      const t = r.how.team;
+      const lu = lineup(t, r.ctx);
+      prompt.textContent = `Punto de ${T[r.winner].name} por error de ${T[t].name}. Detalla el error o toca la cancha para seguir.`;
+      groups.push({ label: 'Tipo de error (opcional)', items: ERR_KINDS.map((k) => ({ act: 'errkind', val: k, text: TIPO_NAME[k], on: r.how.tipo === k })) });
+      groups.push({ label: `¿Quién de ${T[t].name} cometió el error? (opcional)`, items: roleItems(t, onCourt(lu), 'errrole', r.how.role) });
+    } else if (pending === 'ace') {
+      const rec = other(r.winner);
+      const lu = lineup(rec, r.ctx);
+      prompt.textContent = `Ace de ${T[r.winner].name}. Elige quién de ${T[rec].name} recibió o toca la cancha para seguir.`;
+      groups.push({ label: 'Error de recepción de (opcional)', items: roleItems(rec, onCourt(lu), 'recrole', r.lines[0].rec?.role) });
+    }
+  } else if (st.winner) prompt.textContent = 'Partido terminado. Usa Deshacer si necesitas corregir el último punto.';
+  else if (cur.from) prompt.textContent = 'Ahora toca dónde cayó el balón.';
+  else if (!last) {
+    const server = lineup(st.serving, st).pos[1];
+    prompt.textContent = `Saca ${num(st.serving, server)} de ${T[st.serving].name}. Toca desde dónde saca y luego dónde cae.`;
+  } else if (last.kind === 'saque') {
+    const rec = other(last.team);
+    if (gradeOn()) {
+      prompt.textContent = 'Califica la recepción (opcional) y toca el primer ataque, o cierra el rally.';
+      groups.push({ label: `Recepción de ${T[rec].name}`, items: GRADES.map(([g, n, sym]) => ({ act: 'grade', val: g, text: sym, sub: n, on: last.rec?.grade === g })) });
+      groups.push({ label: '¿Quién recibió?', items: roleItems(rec, onCourt(lineup(rec, st)), 'recrole', last.rec?.role) });
+    } else prompt.textContent = 'Toca el primer ataque, o cierra el rally con un resultado.';
+    groups.push({ label: '¿Quién sacó?', items: roleItems(last.team, onCourt(lineup(last.team, st)), 'role', last.role) });
+  } else {
+    const d = other(last.team);
+    if (defenseOn()) {
+      prompt.textContent = 'Califica la defensa (opcional) y toca el siguiente ataque, o cierra el rally.';
+      groups.push({ label: `Defensa de ${T[d].name}`, items: GRADES.map(([g, n, sym]) => ({ act: 'dgrade', val: g, text: sym, sub: n, on: last.def?.grade === g })) });
+      groups.push({ label: '¿Quién defendió?', items: roleItems(d, onCourt(lineup(d, st)), 'defrole', last.def?.role) });
+    } else prompt.textContent = 'Toca el siguiente ataque, o cierra el rally con un resultado.';
+    groups.push({ label: `¿Quién atacó? (${KIND[last.kind]} de ${T[last.team].name})`, items: roleItems(last.team, onCourt(lineup(last.team, st)), 'role', last.role) });
+  }
+  // Aviso: el saque se marcó del lado del equipo que no tiene el servicio.
+  const setStarted = rallies.some((r) => r.ctx.set === st.set);
+  const sOrigin = !cur.lines.length ? cur.from : cur.lines.length === 1 ? cur.lines[0].from : null;
+  const sTeam = cur.lines[0]?.team ?? st.serving;
+  let warn = '';
+  if (!pending && !st.winner && sOrigin && sideOf(sOrigin) !== sTeam) {
+    warn = `Según el marcador saca ${T[sTeam].name}, pero marcaste el saque del lado de ${T[other(sTeam)].name}.`;
+    if (!setStarted) groups.unshift({ label: '¿Quién saca en realidad?', items: [{ act: 'switchserve', val: '1', text: `Saca ${T[other(sTeam)].name}` }] });
+    else warn += ' Si el último punto quedó mal, usa Deshacer.';
+  }
+  // Inicio de set: quién saca y dónde arranca cada armador.
+  if (!pending && !st.winner && !setStarted && !cur.lines.length && !cur.from) {
+    groups.push({ label: `Inicio del set ${st.set + 1}: ¿quién saca?`, items: ['A', 'B'].map((t) => ({ act: 'setserve', val: t, text: T[t].name, on: st.serving === t })) });
+    for (const t of ['A', 'B']) {
+      groups.push({ label: `Armador de ${T[t].name} empieza en zona`, items: [1, 2, 3, 4, 5, 6].map((z) => ({ act: 'setzone', val: `${t}:${z}`, text: String(z), on: startZone(t, st.set) === z })) });
+    }
+  }
+  const noticeEl = document.getElementById('notice');
+  noticeEl.textContent = notice || warn;
+  noticeEl.hidden = !(notice || warn);
+
+  chips.innerHTML = groups.map((g) =>
+    `<span class="lbl">${esc(g.label)}</span>` +
+    g.items.map((it) => `<button class="chip" data-act="${it.act}" data-val="${esc(it.val)}" aria-pressed="${it.on}">${esc(it.text)}${it.sub ? `<small>${esc(it.sub)}</small>` : ''}</button>`).join('')
+  ).join('');
+
+  const can = !!last && !cur.from && !st.winner;
+  const bP = document.getElementById('b-punto'), bE = document.getElementById('b-error'), bB = document.getElementById('b-bloq');
+  bP.disabled = bE.disabled = bB.disabled = !can;
+  if (can) {
+    bP.textContent = last.kind === 'saque' ? `Ace de ${T[last.team].name}` : `Punto de ${T[last.team].name}`;
+    bE.textContent = `Error de ${T[last.team].name}`;
+    bB.textContent = last.kind === 'saque' ? 'Bloqueado' : `Bloqueo de ${T[other(last.team)].name}`;
+    bB.disabled = last.kind === 'saque';
+  } else { bP.textContent = 'Punto'; bE.textContent = 'Error / fuera'; bB.textContent = 'Bloqueado'; }
+
+  document.getElementById('b-manA').textContent = `Punto directo ${T.A.name}`;
+  document.getElementById('b-manB').textContent = `Punto directo ${T.B.name}`;
+  document.getElementById('b-manA').disabled = document.getElementById('b-manB').disabled = !!st.winner || !!cur.from;
+  document.getElementById('b-undo').disabled = !cur.from && !cur.lines.length && !rallies.length;
+  let undoWhat = 'Nada que deshacer.';
+  if (cur.from) undoWhat = 'Quita el toque de origen.';
+  else if (last) undoWhat = `Quita el trazo ${cur.lines.length}: ${KIND[last.kind]} ${num(last.team, last.role)}.`;
+  else if (rallies.length) {
+    const r = rallies.at(-1), sc = { ...r.ctx.score };
+    sc[r.winner]++;
+    const s = r.lines.at(-1);
+    undoWhat = r.auto
+      ? `Quita el saque ${num(s.team, s.role)} y el punto ${sc.A}-${sc.B} de ${T[r.winner].name}.`
+      : `Reabre el punto ${sc.A}-${sc.B} de ${T[r.winner].name}.`;
+  }
+  document.getElementById('undo-what').textContent = undoWhat;
+
+  const log = document.getElementById('log');
+  const lt = document.getElementById('log-t');
+  if (cur.lines.length) {
+    lt.textContent = 'Rally actual';
+    log.innerHTML = cur.lines.map((l, i) => lineItem(l, i)).join('');
+  } else {
+    lt.textContent = 'Últimos puntos';
+    log.innerHTML = rallies.length
+      ? rallies.slice(-6).reverse().map((r) => {
+          const sc = { ...r.ctx.score }; sc[r.winner]++;
+          const h = r.how;
+          const who = h.role ? ` ${esc(num(h.team, h.role))}` : '';
+          const touch = r.lines.at(-1)?.touch;
+          const what = h.col === 'E'
+            ? `error de ${esc(T[h.team].name)}${who}: ${errName(h)}`
+            : `${HOW[h.col]}${who}${touch ? ` (tocó ${touch === 'bloqueo' ? 'el bloqueo' : 'la defensa'})` : ''}`;
+          return `<li><span class="k ${r.winner === 'A' ? 'a' : 'b'}">${sc.A}-${sc.B}</span><span>${esc(T[r.winner].name)} por ${what}</span></li>`;
+        }).join('')
+      : `<li class="muted">Todavía no hay puntos.</li>`;
+  }
+  const actions = rallies.reduce((n, r) => n + r.lines.length, 0) + cur.lines.length;
+  document.getElementById('stats').textContent = `${rallies.length} puntos y ${actions} trazos registrados.`;
+}
+
+function lineItem(l, i) {
+  const zf = l.kind === 'saque' ? serveZone(l.team, l.from) : zoneOf(l.team, l.from);
+  const zt = isOut(l.to) ? 'fuera' : `Z${zoneOf(sideOf(l.to), l.to)}`;
+  const res = { sigue: '', punto: ' · punto', error: ' · error', bloqueado: ' · bloqueado' }[l.result];
+  const rec = l.rec && (l.rec.grade != null || l.rec.role) ? ` · recibe ${esc(num(other(l.team), l.rec.role))} ${l.rec.grade != null ? GRADE_SYM[l.rec.grade] : ''}` : '';
+  const def = l.def && l.def.grade != null ? ` · defiende ${esc(num(other(l.team), l.def.role))} ${GRADE_SYM[l.def.grade]}` : '';
+  return `<li><span class="k ${l.team === 'A' ? 'a' : 'b'}">${i + 1}. ${KIND[l.kind]}</span><span>${esc(num(l.team, l.role))} ${ROLE_SHORT[l.role] ?? ''} · Z${zf} → ${zt}${res}${rec}${def}</span></li>`;
+}
+
+document.getElementById('chips').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  chipAction(b.dataset.act, b.dataset.val);
+  save(); render();
+});
+document.getElementById('b-punto').onclick = () => { endRally('punto'); save(); render(); };
+document.getElementById('b-error').onclick = () => { endRally('error'); save(); render(); };
+document.getElementById('b-bloq').onclick = () => { endRally('bloqueado'); save(); render(); };
+document.getElementById('b-undo').onclick = () => { undo(); save(); render(); };
+document.getElementById('b-manA').onclick = () => { manualPoint('A'); save(); render(); };
+document.getElementById('b-manB').onclick = () => { manualPoint('B'); save(); render(); };
+// Reinicia el partido: borra lo anotado y conserva equipos, formato, inicio del set 1 y configuración.
+function resetMatch() {
+  rallies = []; cur = newRally(); isSample = false; pending = null; notice = '';
+  cfg.sets = cfg.sets?.[0] ? { 0: cfg.sets[0] } : {};
+  save();
+}
+document.getElementById('b-new').onclick = () => { resetMatch(); render(); };
+
+// Reiniciar partido desde Registro: pide un segundo toque y se desarma solo a los pocos segundos.
+let restartTimer = null;
+document.getElementById('b-restart').onclick = (e) => {
+  const b = e.currentTarget;
+  if (!restartTimer) {
+    b.textContent = 'Toca otra vez para borrar todo el partido';
+    b.classList.add('armed');
+    restartTimer = setTimeout(() => { restartTimer = null; b.textContent = 'Reiniciar partido'; b.classList.remove('armed'); }, 4000);
+    return;
+  }
+  clearTimeout(restartTimer); restartTimer = null;
+  b.textContent = 'Reiniciar partido'; b.classList.remove('armed');
+  resetMatch(); render();
+  notice = 'Partido reiniciado. Los equipos y la configuración se mantienen.';
+  render();
+};
+
+// ===== Render: planillas =====
+function miniSVG(lines, team) {
+  const P = (p) => { const { u, d } = frame(team, p); return { x: 9 - u, y: 9 - d }; };
+  let s = `<svg viewBox="-3 -3.5 15 25" aria-hidden="true">
+    <rect class="free" x="-3" y="-3.5" width="15" height="25"/>
+    <rect class="atk" x="0" y="0" width="9" height="9"/><rect class="floor" x="0" y="9" width="9" height="9"/>`;
+  for (const y of [3, 15]) s += `<line class="zl" x1="0" y1="${y}" x2="9" y2="${y}"/>`;
+  for (const x of [3, 6]) s += `<line class="zl" x1="${x}" y1="0" x2="${x}" y2="18"/>`;
+  s += `<rect class="cl" x="0" y="0" width="9" height="18"/><line class="cl" x1="0" y1="6" x2="9" y2="6"/><line class="cl" x1="0" y1="12" x2="9" y2="12"/><line class="net" x1="-0.5" y1="9" x2="9.5" y2="9"/>`;
+  for (const l of lines) {
+    const a = P(l.from), b = P(l.to);
+    const ang = Math.atan2(b.y - a.y, b.x - a.x);
+    s += `<g class="ln ${team === 'A' ? 'a' : 'b'}"><line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>${endMarker(l, b.x, b.y, ang, 1.4)}<circle class="o" cx="${a.x}" cy="${a.y}" r=".22"/></g>`;
+  }
+  return s + '</svg>';
+}
+
+function miniCard(title, meta, lines, team) {
+  return `<div class="mini"><h3>${esc(title)}</h3><div class="meta">${meta}</div>${miniSVG(lines, team)}</div>`;
+}
+function summary(lines) {
+  const n = lines.length, p = lines.filter((l) => l.result === 'punto').length;
+  const e = lines.filter((l) => l.result === 'error' || l.result === 'bloqueado').length;
+  return n ? `${n} · ${p} pto · ${e} err/bloq · ef. ${Math.round((p / n) * 100)}%` : 'Sin datos';
+}
+
+function renderSheets() {
+  const T = cfg.teams, team = sheetTeam;
+  derive(); // asegura el contexto de cada rally
+  const all = rallies.flatMap((r) => r.lines.map((l) => ({ ...l, ctx: r.ctx })));
+
+  const byRot = Object.fromEntries(ROT_COLUMNS.map((z) => [z, []]));
+  for (const l of all) if (l.team === team && l.kind === 'K1') byRot[lineup(team, l.ctx).sZone].push(l);
+
+  const roles = ['P1', 'P2', 'C1', 'C2', 'OP', 'S'];
+  const byRole = (kind) => Object.fromEntries(roles.map((r) => [r, all.filter((l) => l.team === team && l.kind === kind && l.role === r)]));
+  const k2 = byRole('K2');
+  const serves = Object.fromEntries([...roles.filter((r) => r !== 'S'), 'S'].map((r) => [r, all.filter((l) => l.team === team && l.kind === 'saque' && l.role === r)]));
+
+  const legend = `<div class="legend">
+    <span><svg viewBox="0 0 28 14"><line x1="2" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="2"/><circle cx="22" cy="7" r="4" fill="currentColor"/></svg>Punto</span>
+    <span><svg viewBox="0 0 28 14"><line x1="2" y1="7" x2="24" y2="7" stroke="currentColor" stroke-width="2"/></svg>Siguió la jugada</span>
+    <span><svg viewBox="0 0 28 14"><line x1="2" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="2"/><path d="M18 3l7 8M18 11l7-8" stroke="currentColor" stroke-width="2"/></svg>Error</span>
+    <span><svg viewBox="0 0 28 14"><line x1="2" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="2"/><path d="M21 1v12" stroke="currentColor" stroke-width="3"/></svg>Bloqueado</span>
+  </div>`;
+
+  document.getElementById('v-planillas').innerHTML = `
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+      <div class="seg" role="tablist" aria-label="Equipo">
+        ${['A', 'B'].map((t) => `<button class="tab" data-team="${t}" aria-selected="${t === team}">${esc(T[t].name)}</button>`).join('')}
+      </div>
+      ${legend}
+    </div>
+    <div>
+      <h2>K1 por rotación</h2>
+      <p class="sub">Primer ataque de ${esc(T[team].name)} después de recibir. El balón sale desde arriba y cae en la mitad de abajo.</p>
+      <div class="minis">${ROT_COLUMNS.map((z) => miniCard(`Armador en ${z}`, summary(byRot[z]), byRot[z], team)).join('')}</div>
+    </div>
+    <div>
+      <h2>K2 por jugador</h2>
+      <p class="sub">Todos los ataques siguientes del rally, sin importar la rotación.</p>
+      <div class="minis">${roles.map((r) => miniCard(`${ROLE_NAME[r]} ${num(team, r)}`, summary(k2[r]), k2[r], team)).join('')}</div>
+    </div>
+    <div>
+      <h2>Saques</h2>
+      <p class="sub">Desde dónde saca cada jugador y hacia dónde cae.</p>
+      <div class="minis">${Object.entries(serves).map(([r, ls]) => miniCard(`${ROLE_NAME[r]} ${num(team, r)}`, summary(ls), ls, team)).join('')}</div>
+    </div>
+    <div>
+      <h2>Recepción</h2>
+      <p class="sub">Calificación de cada recepción de ${esc(T[team].name)}: doble positiva (3), positiva (2), negativa (1) y error (0, incluye los aces que les hicieron).</p>
+      ${gradeTable(all.filter((l) => l.kind === 'saque' && l.team === other(team)).map((l) => l.rec), team, 'Todavía no hay recepciones calificadas.')}
+    </div>
+    <div>
+      <h2>Defensa</h2>
+      <p class="sub">Calificación de cada defensa de ${esc(T[team].name)} ante los ataques del rival, con la misma escala (el error incluye los ataques que tocaron y no pudieron controlar).</p>
+      ${gradeTable(all.filter((l) => l.kind !== 'saque' && l.team === other(team)).map((l) => l.def), team, 'Todavía no hay defensas calificadas.')}
+    </div>
+    <div>
+      <h2>Errores por jugador</h2>
+      <p class="sub">Puntos que ${esc(T[team].name)} regaló, según el tipo de error.</p>
+      ${errorTable(team)}
+    </div>
+    <div>
+      <h2>Punto a punto</h2>
+      <p class="sub">Igual que la planilla en papel: cada fila es el número de punto de ese equipo. En E va el jugador rival que cometió el error y en Tipo el tipo de error: ${Object.entries(TIPO_NAME).map(([k, n]) => `${k} ${n}`).join(', ')}.</p>
+      ${pointTables()}
+    </div>`;
+}
+
+// Nombre de un error: tipo + si fue fuera o a la malla + motivo de la malla.
+function errName(h) {
+  const where = h.detail === 'fuera' ? ' fuera' : h.detail === 'malla' ? ' a la malla' : '';
+  const why = h.reason === 'potencia' ? ' (faltó potencia)' : h.reason === 'bajo' ? ' (salió bajo)' : '';
+  return `${TIPO_NAME[h.tipo]}${where}${why}`;
+}
+
+const roleOrder = (r) => ['S', 'P1', 'P2', 'C1', 'C2', 'OP', 'L', null].indexOf(r);
+
+// Tabla por jugador para calificaciones { role, grade } (recepción o defensa).
+function gradeTable(entries, team, emptyText) {
+  const graded = entries.filter((e) => e && e.grade != null);
+  if (!graded.length) return `<p class="empty">${emptyText}</p>`;
+  const by = new Map();
+  for (const e of graded) {
+    const k = e.role ?? null;
+    if (!by.has(k)) by.set(k, { 3: 0, 2: 0, 1: 0, 0: 0 });
+    by.get(k)[e.grade]++;
+  }
+  const rows = [...by.entries()].sort((a, b) => roleOrder(a[0]) - roleOrder(b[0])).map(([role, c]) => {
+    const n = c[3] + c[2] + c[1] + c[0];
+    const avg = (c[3] * 3 + c[2] * 2 + c[1]) / n;
+    return `<tr><td class="lft">${role ? `${esc(num(team, role))} ${ROLE_NAME[role]}` : 'Sin jugador'}</td><td>${c[3]}</td><td>${c[2]}</td><td>${c[1]}</td><td>${c[0]}</td><td>${n}</td><td>${avg.toFixed(2)}</td><td>${Math.round(((c[3] + c[2]) / n) * 100)}%</td></tr>`;
+  }).join('');
+  return `<div class="tablewrap"><table class="pp stat">
+    <thead><tr><th class="lft">Jugador</th><th># (3)</th><th>+ (2)</th><th>− (1)</th><th>= (0)</th><th>Total</th><th>Promedio</th><th>% positiva</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function errorTable(team) {
+  // Errores directos del equipo, más los balones que tocaron su bloqueo y salieron (error de bloqueo).
+  const items = [
+    ...rallies.filter((r) => r.how.col === 'E' && r.how.team === team).map((r) => ({ role: r.how.role, name: errName(r.how) })),
+    ...rallies.filter((r) => r.blockTouch?.team === team).map((r) => ({ role: r.blockTouch.role, name: 'bloqueo (tocó y salió)' })),
+  ];
+  if (!items.length) return `<p class="empty">Sin errores registrados.</p>`;
+  const names = [...new Set(items.map((i) => i.name))];
+  const by = new Map();
+  for (const i of items) {
+    const k = i.role ?? null;
+    if (!by.has(k)) by.set(k, {});
+    const row = by.get(k);
+    row[i.name] = (row[i.name] ?? 0) + 1;
+  }
+  const rows = [...by.entries()].sort((a, b) => roleOrder(a[0]) - roleOrder(b[0])).map(([role, c]) =>
+    `<tr><td class="lft">${role ? `${esc(num(team, role))} ${ROLE_NAME[role]}` : 'Sin jugador'}</td>${names.map((k) => `<td>${c[k] ?? ''}</td>`).join('')}<td>${Object.values(c).reduce((a, b) => a + b, 0)}</td></tr>`
+  ).join('');
+  return `<div class="tablewrap"><table class="pp stat">
+    <thead><tr><th class="lft">Jugador</th>${names.map((k) => `<th>${esc(k)}</th>`).join('')}<th>Total</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function pointTables() {
+  const T = cfg.teams;
+  const sets = [...new Set(rallies.map((r) => r.ctx.set))];
+  if (!sets.length) return `<p class="empty">Todavía no hay puntos anotados.</p>`;
+  const cols = ['S', 'B', 'A', 'CO', 'E', 'Tipo'];
+  return sets.map((s) => {
+    const rs = rallies.filter((r) => r.ctx.set === s);
+    const grid = { A: {}, B: {} };
+    let max = target(s);
+    for (const r of rs) {
+      const n = r.ctx.score[r.winner] + 1;
+      max = Math.max(max, n);
+      grid[r.winner][n] = r.how;
+    }
+    const cells = (t, n) => {
+      const h = grid[t][n];
+      const cls = t === 'A' ? 'fa' : 'fb';
+      return cols.map((c) => {
+        if (!h) return '<td></td>';
+        if (c === 'Tipo') return `<td class="${cls}">${h.col === 'E' ? h.tipo : ''}</td>`;
+        if (c !== h.col) return '<td></td>';
+        const who = h.role ? num(h.team, h.role) : '✓';
+        return `<td class="${cls}">${esc(who)}</td>`;
+      }).join('');
+    };
+    let rows = '';
+    for (let n = 1; n <= max; n++) rows += `<tr>${cells('A', n)}<td class="n">${n}</td>${cells('B', n)}</tr>`;
+    return `<p class="section-t" style="margin-top:10px">Set ${s + 1}</p>
+      <div class="tablewrap"><table class="pp">
+        <thead><tr><th class="ta" colspan="6">${esc(T.A.name)}</th><th>Pto</th><th class="tb" colspan="6">${esc(T.B.name)}</th></tr>
+        <tr>${cols.map((c) => `<th>${c}</th>`).join('')}<th></th>${cols.map((c) => `<th>${c}</th>`).join('')}</tr></thead>
+        <tbody>${rows}</tbody></table></div>`;
+  }).join('');
+}
+
+document.getElementById('v-planillas').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-team]');
+  if (!b) return;
+  sheetTeam = b.dataset.team;
+  renderSheets();
+});
+
+// ===== Equipos =====
+function renderCfg() {
+  const roles = ['S', 'P1', 'P2', 'C1', 'C2', 'OP', 'L'];
+  document.getElementById('cfg-teams').innerHTML = ['A', 'B'].map((t) => {
+    const tm = cfg.teams[t];
+    return `<fieldset>
+      <legend class="${t === 'A' ? 'a' : 'b'}">${t === 'A' ? 'Equipo izquierdo' : 'Equipo derecho'}</legend>
+      <label class="wide">Nombre<input type="text" id="${t}-name" value="${esc(tm.name)}" maxlength="30"></label>
+      ${roles.map((r) => `<label>${ROLE_NAME[r]}<input type="text" inputmode="numeric" id="${t}-${r}" value="${esc(tm.nums[r] ?? '')}" maxlength="3" placeholder="—"></label>`).join('')}
+      <label>Armador empieza en
+        <select id="${t}-start">${[1, 2, 3, 4, 5, 6].map((z) => `<option value="${z}" ${z === startZone(t, 0) ? 'selected' : ''}>Zona ${z}</option>`).join('')}</select>
+      </label>
+      <label class="check wide"><input type="checkbox" id="${t}-useL" ${tm.useLibero ? 'checked' : ''}> Juega con líbero (entra por los centrales en zaguera)</label>
+    </fieldset>`;
+  }).join('');
+  document.getElementById('m-first').value = firstServer(0);
+  document.getElementById('m-bestof').value = String(cfg.bestOf);
+  document.getElementById('m-points').value = cfg.setPoints;
+  document.getElementById('m-tiebreak').value = cfg.tiebreak;
+  syncTiebreak();
+  resetArmed = false;
+  document.getElementById('b-reset').textContent = 'Borrar lo registrado';
+}
+
+document.getElementById('cfg-form').onsubmit = (e) => {
+  e.preventDefault();
+  for (const t of ['A', 'B']) {
+    const tm = cfg.teams[t];
+    tm.name = document.getElementById(`${t}-name`).value.trim() || (t === 'A' ? 'Equipo A' : 'Equipo B');
+    for (const r of ['S', 'P1', 'P2', 'C1', 'C2', 'OP', 'L']) tm.nums[r] = document.getElementById(`${t}-${r}`).value.trim();
+    tm.startZone = Number(document.getElementById(`${t}-start`).value);
+    tm.useLibero = document.getElementById(`${t}-useL`).checked;
+  }
+  cfg.firstServer = document.getElementById('m-first').value;
+  // Lo de esta pestaña es el inicio del set 1 (los demás sets se eligen al empezar cada uno).
+  setSetStart(0, { serve: cfg.firstServer, A: cfg.teams.A.startZone, B: cfg.teams.B.startZone });
+  cfg.bestOf = Number(document.getElementById('m-bestof').value);
+  const pts = (id, fallback) => { const n = Math.round(Number(document.getElementById(id).value)); return n >= 1 && n <= 99 ? n : fallback; };
+  cfg.setPoints = pts('m-points', cfg.setPoints);
+  cfg.tiebreak = pts('m-tiebreak', cfg.tiebreak);
+  renderCfg(); save(); render();
+  const toast = document.getElementById('toast');
+  toast.hidden = false;
+  setTimeout(() => (toast.hidden = true), 1500);
+};
+
+// Con set único no hay set decisivo: se oculta ese campo.
+function syncTiebreak() {
+  document.getElementById('m-tb-label').hidden = document.getElementById('m-bestof').value === '1';
+}
+document.getElementById('m-bestof').addEventListener('change', syncTiebreak);
+
+document.getElementById('b-reset').onclick = (e) => {
+  if (!resetArmed) { resetArmed = true; e.target.textContent = 'Toca otra vez para borrar todo'; return; }
+  resetMatch();
+  renderCfg();
+};
+
+// ===== Configuración =====
+function renderSettings() {
+  document.getElementById('set-list').innerHTML = SETTINGS.map((g) => `
+    <div class="set-group">
+      <h3>${g.group}</h3>
+      <div class="set-items">
+        ${g.items.map((s) => `
+          <label class="set-row" for="set-${s.key}">
+            <input type="checkbox" id="set-${s.key}" data-key="${s.key}" ${isOn(s.key) ? 'checked' : ''}>
+            <div><strong>${esc(s.title)}</strong><span>${esc(s.desc)}</span></div>
+          </label>`).join('')}
+      </div>
+    </div>`).join('');
+}
+document.getElementById('set-list').addEventListener('change', (e) => {
+  const key = e.target.dataset.key;
+  if (!key) return;
+  cfg[key] = e.target.checked;
+  if (key === 'confirmOut' && pending === 'attackOut' && !cfg[key]) pending = null;
+  save();
+});
+
+// ===== Navegación =====
+document.querySelector('.tabs').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-view]');
+  if (!b) return;
+  view = b.dataset.view;
+  if (view === 'equipos') renderCfg();
+  if (view === 'config') renderSettings();
+  render();
+});
+
+function render() {
+  for (const v of ['registro', 'planillas', 'equipos', 'config']) {
+    document.getElementById(`v-${v}`).hidden = v !== view;
+    document.getElementById(`tab-${v}`).setAttribute('aria-selected', String(v === view));
+  }
+  const st = derive();
+  if (view === 'registro') { renderCourt(st); renderPanel(st); }
+  if (view === 'planillas') renderSheets();
+}
+
+// Mantener la pantalla encendida mientras se registra (si el navegador lo permite).
+let wakeLock = null;
+async function keepAwake() {
+  if (wakeLock || !navigator.wakeLock) return;
+  try { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => (wakeLock = null)); } catch {}
+}
+
+if (!load()) seed();
+render();
+</script>

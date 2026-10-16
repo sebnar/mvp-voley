@@ -1,0 +1,7 @@
+# Material de referencia (fotos, PDF y formatos de la liga): se queda solo en local.
+insumos/
+
+# Sistema operativo
+Thumbs.db
+desktop.ini
+.DS_Store
