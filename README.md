@@ -14,6 +14,13 @@ jugador, saques, recepción, defensa, errores y punto a punto).
 | `index.html` | Redirige al prototipo. |
 | `serve.ps1` | Servidor local mínimo para abrirlo en el computador (no requiere Node ni Python). |
 
+## Abrirlo en línea
+
+Publicado con GitHub Pages: <https://sebnar.github.io/mvp-voley/>
+
+Se publica solo con cada subida a `main` (flujo `.github/workflows/pages.yml`, que envuelve
+`prototipo/registro.html` en una página HTML completa).
+
 ## Abrirlo en el computador
 
 ```powershell

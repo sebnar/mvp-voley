@@ -1,0 +1,51 @@
+# Publica el prototipo en GitHub Pages cada vez que se sube a main.
+# prototipo/registro.html se escribe sin <!doctype>, <head> ni <body> (así lo pide la
+# publicación como Artifact de Claude), por eso aquí se envuelve en un documento completo.
+name: Publicar en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Armar el sitio
+        run: |
+          mkdir -p _site
+          {
+            printf '%s\n' \
+              '<!doctype html>' \
+              '<html lang="es">' \
+              '<head>' \
+              '<meta charset="utf-8">' \
+              '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' \
+              '<style>body{margin:0}</style>' \
+              '</head>' \
+              '<body>'
+            cat prototipo/registro.html
+            printf '%s\n' '</body>' '</html>'
+          } > _site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
