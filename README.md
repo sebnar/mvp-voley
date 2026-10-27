@@ -21,6 +21,9 @@ Publicado con GitHub Pages: <https://sebnar.github.io/mvp-voley/>
 Se publica solo con cada subida a `main` (flujo `.github/workflows/pages.yml`, que envuelve
 `prototipo/registro.html` en una página HTML completa).
 
+La versión publicada tiene analítica de uso con [GoatCounter](https://mvp-voley.goatcounter.com):
+sin cookies y sin enviar datos de los partidos (ver RNF-07 en los requerimientos).
+
 ## Abrirlo en el computador
 
 ```powershell

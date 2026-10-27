@@ -653,14 +653,35 @@ function undo() {
   checkAttackOut();
 }
 
+// ===== Analítica de uso =====
+// Solo existe en la versión publicada en GitHub Pages (GoatCounter, sin cookies); en cualquier otro
+// lugar track() no hace nada. Se envía únicamente el nombre del evento: nunca equipos, números,
+// marcadores ni nada de lo registrado.
+const tracked = new Set(); // hitos ya enviados del partido actual
+function track(event) {
+  try { window.goatcounter?.count?.({ path: event, title: event, event: true }); } catch {}
+}
+// Hitos de un partido real (no el de ejemplo), una sola vez por partido.
+function trackProgress() {
+  if (isSample || !rallies.length) return;
+  const once = (event) => { if (!tracked.has(event)) { tracked.add(event); track(event); } };
+  once('primer-punto');
+  if (derive().winner) once('partido-terminado');
+}
+
 // ===== Persistencia (solo en este dispositivo) =====
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ cfg, rallies: rallies.map(({ ctx, ...r }) => r), cur, isSample })); } catch {}
+  trackProgress();
+  try { localStorage.setItem(STORE, JSON.stringify({ cfg, rallies: rallies.map(({ ctx, ...r }) => r), cur, isSample, tracked: [...tracked] })); } catch {}
 }
 function load() {
   try {
     const d = JSON.parse(localStorage.getItem(STORE));
-    if (d && d.cfg) { cfg = d.cfg; rallies = d.rallies; cur = d.cur; isSample = !!d.isSample; return true; }
+    if (d && d.cfg) {
+      cfg = d.cfg; rallies = d.rallies; cur = d.cur; isSample = !!d.isSample;
+      for (const e of d.tracked ?? []) tracked.add(e);
+      return true;
+    }
   } catch {}
   return false;
 }
@@ -973,9 +994,10 @@ document.getElementById('b-manB').onclick = () => { manualPoint('B'); save(); re
 function resetMatch() {
   rallies = []; cur = newRally(); isSample = false; pending = null; notice = '';
   cfg.sets = cfg.sets?.[0] ? { 0: cfg.sets[0] } : {};
+  tracked.clear();
   save();
 }
-document.getElementById('b-new').onclick = () => { resetMatch(); render(); };
+document.getElementById('b-new').onclick = () => { resetMatch(); track('partido-nuevo'); render(); };
 
 // Reiniciar partido desde Registro: pide un segundo toque y se desarma solo a los pocos segundos.
 let restartTimer = null;
@@ -989,7 +1011,7 @@ document.getElementById('b-restart').onclick = (e) => {
   }
   clearTimeout(restartTimer); restartTimer = null;
   b.textContent = 'Reiniciar partido'; b.classList.remove('armed');
-  resetMatch(); render();
+  resetMatch(); track('partido-reiniciado'); render();
   notice = 'Partido reiniciado. Los equipos y la configuración se mantienen.';
   render();
 };
@@ -1265,6 +1287,7 @@ document.querySelector('.tabs').addEventListener('click', (e) => {
   view = b.dataset.view;
   if (view === 'equipos') renderCfg();
   if (view === 'config') renderSettings();
+  if (view !== 'registro') track(`vista-${view}`);
   render();
 });
 

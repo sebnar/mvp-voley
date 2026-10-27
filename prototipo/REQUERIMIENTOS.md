@@ -162,6 +162,10 @@ Se generan solas a partir de lo registrado, **por equipo**:
 - **RNF-04. Sin conexión:** en el prototipo los datos se guardan en el propio dispositivo (`localStorage`).
 - **RNF-05. Hora de cada acción:** cada trazo guarda su hora, para poder sincronizarlo después con el video del partido.
 - **RNF-06. Tema claro y oscuro.**
+- **RNF-07. Analítica de uso** (solo en la versión de GitHub Pages) con **GoatCounter**, sin cookies. Panel: https://mvp-voley.goatcounter.com
+  - Cuenta las visitas y estos eventos: `partido-nuevo`, `partido-reiniciado`, `primer-punto` y `partido-terminado` (una vez por partido, nunca en el partido de ejemplo), y `vista-planillas`, `vista-equipos` y `vista-config`.
+  - **Nunca envía datos del partido** (equipos, números, marcadores ni jugadas), solo el nombre del evento.
+  - Se activa en el flujo de publicación (`GOATCOUNTER_CODE` en `.github/workflows/pages.yml`). Si ese valor queda vacío, se apaga.
 
 ## 6. Modelo de datos (prototipo)
 
